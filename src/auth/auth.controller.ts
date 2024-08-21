@@ -1,12 +1,15 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Get, Req, UseGuards } from '@nestjs/common';
 import { AuthPayloadDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { User } from '@prisma/client';
 import { GetUser } from 'src/common/decorators/getUser.decorator';
+import { Request } from 'express';
+import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
+import { RefreshTokenGuard } from 'src/common/guards/refreshToken.guard';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private authService: AuthService) {}
 
   @Post('register')
   register(@Body() user: User) {
@@ -15,11 +18,21 @@ export class AuthController {
 
   @Post('login')
   login(@Body() authPayload: AuthPayloadDto) {
-    return this.authService.validateUser(authPayload);
+    return this.authService.login(authPayload);
   }
 
-  @Post('logout')
-  async logout(@GetUser() user: User) {
-    return this.authService.logout(user);
+  @UseGuards(AccessTokenGuard)
+  @Get('logout')
+  logout(@Req() req: Request) {
+    return this.authService.logout(req.user['sub']);
+  }
+
+  @UseGuards(RefreshTokenGuard)
+  @Get('refresh')
+  refreshTokens(@Req() req: Request) {
+    const userId = req.user['sub'];
+    const refreshToken = req.user['refreshToken'];
+    console.log(req)
+    return this.authService.refreshTokens(userId, refreshToken);
   }
 }
