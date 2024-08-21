@@ -22,6 +22,18 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
+  async register(user: User) {
+    const findUser = await this.prismaService.user.findUnique({
+      where: {
+        email: user.email,
+      },
+    });
+    if (findUser) {
+      throw new UnauthorizedException('User already exists.');
+    }
+    return this.prismaService.user.create({ data: user });
+  }
+
   async validateUser({ email, password }: AuthPayloadDto) {
     const findUser = await this.prismaService.user.findUnique({
       where: {
@@ -34,6 +46,7 @@ export class AuthService {
     if (findUser.password === password) {
       const { password, ...user } = findUser;
       const accessToken = this.jwtService.sign(user);
+      this.updateRefreshToken(user.id, accessToken);
       return { user, accessToken };
     } else {
       throw new UnauthorizedException('Invalid password.');
@@ -41,6 +54,16 @@ export class AuthService {
   }
 
   async logout(user: User) {
-    
+    return this.prismaService.user.update({
+      where: { id: user.id },
+      data: { refreshToken: null },
+    });
+  }
+
+  async updateRefreshToken(userId: string, refreshToken: string) {
+    await this.prismaService.user.update({
+      where: { id: userId },
+      data: { refreshToken },
+    });
   }
 }
