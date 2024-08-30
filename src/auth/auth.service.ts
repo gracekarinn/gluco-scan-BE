@@ -29,10 +29,7 @@ export class AuthService {
     if (findUser) {
       throw new BadRequestException('User already exists.');
     }
-    const newUser = await this.prismaService.user.create({ data: user });
-    const tokens = await this.getTokens(newUser.id, newUser.email);
-    await this.updateRefreshToken(newUser.id, tokens.refreshToken);
-    return tokens;
+    await this.prismaService.user.create({ data: user });
   }
 
   async login({ email, password }: AuthPayloadDto) {
