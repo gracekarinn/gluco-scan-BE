@@ -10,9 +10,9 @@ export class UsersService {
     return this.PrismaService.user.findMany();
   }
 
-  async findById(email: string): Promise<User> {
+  async findById(userId: string): Promise<User> {
     return this.PrismaService.user.findUnique({
-      where: { email },
+      where: { id: userId },
     });
   }
 
