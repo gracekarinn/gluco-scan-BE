@@ -2,7 +2,6 @@ import { Body, Controller, Post, Get, Req, UseGuards } from '@nestjs/common';
 import { AuthPayloadDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { User } from '@prisma/client';
-import { GetUser } from 'src/common/decorators/getUser.decorator';
 import { Request } from 'express';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
 import { RefreshTokenGuard } from 'src/common/guards/refreshToken.guard';
