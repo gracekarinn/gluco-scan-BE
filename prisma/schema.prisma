@@ -14,19 +14,35 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid()) @unique
-  username  String  
-  gender    String 
-  weight    String
-  height    String
-  fullName  String
-  tanggalLahir DateTime
+  id            String   @id @default(cuid()) @unique
+  username      String  
+  gender        String 
+  weight        String
+  height        String
+  fullName      String
+  tanggalLahir  DateTime
   riwayatDiabetes Boolean
   riwayatPenyakit String?
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  refreshToken String?
+  email         String   @unique
+  password      String
+  batasGula     Int      @default(0)
+  isAdmin       Boolean  @default(false)
+  isPro         Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  refreshToken  String?
+  konsumsiGula  Product[]
 }
 
+model Product {
+  id         String   @id @default(cuid()) @unique
+  productId  String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  kadarGula  Float
+  image      String
+  namaProduct String
+  takaran      String
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String   
+}
