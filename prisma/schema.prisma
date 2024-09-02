@@ -28,6 +28,7 @@ model User {
   batasGula     Int      @default(0)
   isAdmin       Boolean  @default(false)
   isPro         Boolean  @default(false)
+  proUntil      DateTime?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   refreshToken  String?
