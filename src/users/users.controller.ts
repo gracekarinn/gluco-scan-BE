@@ -1,4 +1,12 @@
-import { Controller, Get, Body, Patch, Param, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Body,
+  Patch,
+  Param,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from '@prisma/client';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
@@ -23,5 +31,11 @@ export class UsersController {
   @Patch('update/:id')
   update(@Param('id') id: string, @Body() updateUserDto: User) {
     return this.usersService.update(id, updateUserDto);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('update/membership')
+  upgradeToPro(@Req() req: Request) {
+    return this.usersService.upgradeToPro(req.user['sub']);
   }
 }
