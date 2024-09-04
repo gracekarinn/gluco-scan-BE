@@ -58,4 +58,11 @@ export class UsersService {
       await this.checkMembership(user.id);
     }
   }
+
+  async setBatasGula(id: string, batasGula: number): Promise<User> {
+    return await this.PrismaService.user.update({
+      where: { id },
+      data: { batasGula },
+    });
+  }
 }

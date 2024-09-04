@@ -38,4 +38,10 @@ export class UsersController {
   upgradeToPro(@Req() req: Request) {
     return this.usersService.upgradeToPro(req.user['sub']);
   }
+
+  @UseGuards(AccessTokenGuard)
+  @Patch('set/batasGula')
+  setBatasGula(@Req() req: Request, @Body() batasGula: number) {
+    return this.usersService.setBatasGula(req.user['sub'], batasGula);
+  }
 }
