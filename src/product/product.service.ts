@@ -32,14 +32,21 @@ export class ProductService {
 
   async gulaBySevenDays(userId: string): Promise<number[]> {
     const products = await this.prismaService.product.findMany({
-      where: { userId },
+      where: {
+        userId,
+        createdAt: {
+          gte: new Date(new Date().setDate(new Date().getDate() - 7)),
+          lte: new Date(),
+        },
+      },
     });
 
     const gulaBySevenDays = Array(7).fill(0);
 
     for (const product of products) {
       const index = Math.floor(
-        (new Date(product.createdAt).getTime() - new Date().getTime()) /
+        (new Date(product.createdAt).getTime() -
+          new Date(new Date().setDate(new Date().getDate() - 7)).getTime()) /
           (1000 * 60 * 60 * 24),
       );
       gulaBySevenDays[index] += product.kadarGula;
