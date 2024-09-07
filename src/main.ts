@@ -18,6 +18,7 @@ async function bootstrap() {
       }
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    
   };
 
   const app = await NestFactory.create(AppModule);
