@@ -40,8 +40,8 @@ export class UsersController {
   }
 
   @UseGuards(AccessTokenGuard)
-  @Patch('set/batasGula')
-  setBatasGula(@Req() req: Request, @Body() batasGula: number) {
+  @Patch('set/batasGula/:amount')
+  setBatasGula(@Req() req: Request, @Param('amount') batasGula: number) {
     return this.usersService.setBatasGula(req.user['sub'], batasGula);
   }
 }

@@ -62,7 +62,7 @@ export class UsersService {
   async setBatasGula(id: string, batasGula: number): Promise<User> {
     return await this.PrismaService.user.update({
       where: { id },
-      data: { batasGula },
+      data: { batasGula: Number(batasGula) },
     });
   }
 }
